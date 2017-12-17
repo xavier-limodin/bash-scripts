@@ -51,7 +51,7 @@ case $CHOICE in
             clear
             exec 3>&-
 
-            if [ exitcode==0 ] && [ -n "${venvname[0]}" ]
+            if [ "$exitcode" -eq 0 ] && [ -n "${venvname[0]}" ]
                 then
                     mkproject ${venvname[0]}
                     cp -r $TEMPLATES_HOME/.vscode $PROJECT_HOME/${venvname[0]}/
@@ -79,16 +79,16 @@ case $CHOICE in
                 then
                 rmvirtualenv ${virtualenv[0]}
                 exitcode=$?
-                if [ exitcode!=0 ]
+                if [ "$exitcode" -ne 0 ]
                     then
                         echo "Oops, something went wrong : $exitcode"
                         exit $exitcode
                 fi
             fi
 
-            if [ -d "$$PROJECT_HOME/${virtualenv[0]}" ]
+            if [ -d "$PROJECT_HOME/${virtualenv[0]}" ]
                 then
-                    rm -rf "$$PROJECT_HOME/${virtualenv[0]}"
+                    rm -rf "$PROJECT_HOME/${virtualenv[0]}"
                 else
                     echo "Project ${virtualenv[0]} not found"
             fi
