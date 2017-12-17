@@ -45,7 +45,7 @@ case $CHOICE in
         2)
             exec 3>&1
             venvname=$(dialog --backtitle "$BACKTITLE" \
-                    --title $TITLE \
+                    --title "$TITLE" \
                     --inputbox "project name" 0 0 2>&1 1>&3)
             exitcode=$?
             clear
@@ -83,6 +83,7 @@ case $CHOICE in
                     then
                         echo "Oops, something went wrong : $exitcode"
                         exit $exitcode
+                fi
             fi
 
             if [ -d "$$PROJECT_HOME/${virtualenv[0]}" ]
