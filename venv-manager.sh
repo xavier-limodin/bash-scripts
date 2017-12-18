@@ -53,7 +53,7 @@ case $CHOICE in
 
             if [ "$exitcode" -eq 0 ] && [ -n "${venvname[0]}" ]
                 then
-                    mkproject ${venvname[0]}
+                    mkproject --no-site-packages ${venvname[0]}
                     cp -r $TEMPLATES_HOME/.vscode $PROJECT_HOME/${venvname[0]}/
                     cp -r $TEMPLATES_HOME/.gitignore $PROJECT_HOME/${venvname[0]}/
                     cd $PROJECT_HOME/${venvname[0]}/
