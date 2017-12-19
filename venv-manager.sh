@@ -33,10 +33,10 @@ case $CHOICE in
             echo "Choose project from list :"
             read -a project
 
-            if [ -d "$WORKON_HOME/${project[0]}" ]
+            if [ -d "$PROJECT_HOME/${project[0]}" ]
                 then
                     workon ${project[0]}
-                    code $PROJECT_HOME/${venvname[0]}/
+                    code "$PROJECT_HOME/${project[0]}"
                 else
                     echo "Oops, folder not found, need glasses?"
                     exit 1
@@ -56,11 +56,12 @@ case $CHOICE in
                     mkproject --no-site-packages ${venvname[0]}
                     cp -r $TEMPLATES_HOME/.vscode $PROJECT_HOME/${venvname[0]}/
                     cp -r $TEMPLATES_HOME/.gitignore $PROJECT_HOME/${venvname[0]}/
+                    sed -i -e "/pythonPath/ s|python|"$WORKON_HOME"/"${venvname[0]}"/bin/python|3" $PROJECT_HOME/${venvname[0]}/.vscode/settings.json
                     cd $PROJECT_HOME/${venvname[0]}/
                     git init
                     git add .
                     git commit -m 'Initial commit'
-                    code $PROJECT_HOME/${venvname[0]}/
+                    code "$PROJECT_HOME/${venvname[0]}/"
                 else
                     echo "Oops, something went wrong : $exitcode"
                     exit $exitcode
