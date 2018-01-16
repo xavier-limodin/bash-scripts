@@ -54,10 +54,12 @@ case $CHOICE in
             if [ "$exitcode" -eq 0 ] && [ -n "${venvname[0]}" ]
                 then
                     mkproject --no-site-packages ${venvname[0]}
-                    cp -r $TEMPLATES_HOME/.vscode $PROJECT_HOME/${venvname[0]}/
-                    cp -r $TEMPLATES_HOME/.gitignore $PROJECT_HOME/${venvname[0]}/
+                    mkdir "$PROJECT_HOME"/"${venvname[0]}"/.vscode
+                    cp -rv "$TEMPLATES_HOME"/* "$PROJECT_HOME"/"${venvname[0]}"/.vscode/
+                    cp -v "$TEMPLATES_HOME"/.gitignore "$PROJECT_HOME"/"${venvname[0]}"/
                     sed -i -e "/pythonPath/ s|python|"$WORKON_HOME"/"${venvname[0]}"/bin/python|3" $PROJECT_HOME/${venvname[0]}/.vscode/settings.json
-                    cd $PROJECT_HOME/${venvname[0]}/
+                    sed -i -e "/venvPath/ s|\"\"|\""$WORKON_HOME"\"|" $PROJECT_HOME/${venvname[0]}/.vscode/settings.json
+                    cd "$PROJECT_HOME"/"${venvname[0]}"/
                     git init
                     git add .
                     git commit -m 'Initial commit'
