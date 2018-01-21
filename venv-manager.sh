@@ -24,6 +24,8 @@ CHOICE=$(dialog --clear \
                 2>&1 >/dev/tty)
 
 clear
+
+clear
 case $CHOICE in
         1)
             echo "You chose to open venv"
@@ -43,6 +45,16 @@ case $CHOICE in
             fi
             ;;
         2)
+            ENVOPTIONS=(1 "Python 2"
+                        2 "Python 3")
+
+            ENVCHOICE=$(dialog --clear \
+                                --backtitle "$BACKTITLE" \
+                                --menu "$MENU" \
+                            $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                            "${ENVOPTIONS[@]}" \
+                            2>&1 >/dev/tty)
+
             exec 3>&1
             venvname=$(dialog --backtitle "$BACKTITLE" \
                     --title "$TITLE" \
@@ -53,7 +65,16 @@ case $CHOICE in
 
             if [ "$exitcode" -eq 0 ] && [ -n "${venvname[0]}" ]
                 then
-                    mkproject --no-site-packages ${venvname[0]}
+                    case $ENVCHOICE in
+                        1)
+                        echo "You chose Python 2"
+                        mkproject --no-site-packages "${venvname[0]}"
+                        ;;
+                        2)
+                        echo "You chose Python 3"
+                        mkproject --python=/usr/bin/python3 --no-site-packages "${venvname[0]}"
+                        ;;
+                    esac
                     mkdir "$PROJECT_HOME"/"${venvname[0]}"/.vscode
                     cp -rv "$TEMPLATES_HOME"/* "$PROJECT_HOME"/"${venvname[0]}"/.vscode/
                     cp -v "$TEMPLATES_HOME"/.gitignore "$PROJECT_HOME"/"${venvname[0]}"/
